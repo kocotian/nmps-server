@@ -1,2 +1,2 @@
 <?php
-$argv = explode("\1", $_GET['argv']);
+$argv = explode("\1", $_SERVER['HTTP_ARGV']);

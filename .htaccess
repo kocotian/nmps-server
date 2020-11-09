@@ -1,0 +1,3 @@
+#Wersja PHP zmieniona: 2020-05-26 10:25:31
+AddHandler application/x-httpd-php73 php 
+#Zmiana obslugi php wprowadzona przez administracje WEBD
