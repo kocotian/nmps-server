@@ -18,7 +18,7 @@ class db
 	{
 		try
 		{
-			$dbCredentials = require("dbconnect.php");
+			$dbCredentials = require("../nmpsdb.php");
 			$pdo = new PDO("mysql:host={$dbCredentials['host']};dbname={$dbCredentials['database']};charset=utf8", $dbCredentials['username'], $dbCredentials['password'], [
 				PDO::ATTR_EMULATE_PREPARES => false,
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
