@@ -7,7 +7,7 @@ To properly configure nmps, create in nmps parent directory file `nmpsdb.php` wi
     [
         "host"     => "<DATABASE HOST>",
         "username" => "<DATABASE USERNAME>",
-		"password" => "<DATABASE PASSWORD>",
+        "password" => "<DATABASE PASSWORD>",
         "database" => "<DATABASE NAME>"
     ];
 ```
