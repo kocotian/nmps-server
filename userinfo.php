@@ -2,6 +2,7 @@
 
 	require_once "require/nmps.php";
 
+	if (!strlen($argv[0])) $argv[0] = $userinfo['username'];
 	$user = db::query("SELECT * FROM users WHERE username=:username", ['username' => $argv[0]])[0];
 	if ($user) {
 		echo "\033[1;33musername:        \033[0;33m" . $user['username'] . "\n";
