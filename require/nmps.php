@@ -1,7 +1,7 @@
 <?php
 
 $argv = explode("\1", $_SERVER['HTTP_ARGV']);
-db::query("DELETE FROM authTokens WHERE UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(lastUsage) >= 300");
+db::query("DELETE FROM authTokens WHERE UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(lastUsage) >= 60");
 
 if (!isset($unauthorized)) {
 	$authToken = $_SERVER['HTTP_AUTH_TOKEN'];
@@ -20,26 +20,24 @@ if (!isset($unauthorized)) {
 	}
 }
 
-class db
-{
-	private static function connect()
+class db {
+	private static function
+	connect()
 	{
-		try
-		{
+		try {
 			$dbCredentials = require("../nmpsdb.php");
 			$pdo = new PDO("mysql:host={$dbCredentials['host']};dbname={$dbCredentials['database']};charset=utf8", $dbCredentials['username'], $dbCredentials['password'], [
 				PDO::ATTR_EMULATE_PREPARES => false,
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 			]);
 			return $pdo;
-		}
-		catch(PDOException $error)
-		{
+		} catch(PDOException $error) {
 			exit("Database error");
 		}
 	}
 
-	public static function query($query, $parameters = [])
+	public static function
+	query($query, $parameters = [])
 	{
 		$statement = self::connect() -> prepare($query);
 		$statement -> execute($parameters);
@@ -48,5 +46,36 @@ class db
 			$data = $statement -> fetchAll();
 			return $data;
 		}
+	}
+}
+
+class userAccount
+{
+	public static function
+	usernameToId($username)
+	{
+		$id = db::query("SELECT id FROM users WHERE username=:username", [':username' => $username]);
+		if ($id) return $id[0]['id'];
+		else return false;
+	}
+
+	public static function
+	idToUsername($id)
+	{
+		$username = db::query("SELECT username FROM users WHERE id=:id", [':id' => $id]);
+		if ($username) return $username[0]['username'];
+		else return false;
+	}
+
+	public static function
+	isUserOnline($id)
+	{
+		return count(db::query("SELECT * FROM authTokens WHERE userId=:userId", [':userId' => $id]));
+	}
+
+	public static function
+	getOnline()
+	{
+		return db::query("SELECT *, UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(authTokens.lastUsage) AS timeDifference FROM authTokens WHERE 1");
 	}
 }
