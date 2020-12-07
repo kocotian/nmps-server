@@ -3,8 +3,9 @@
 $argv = explode("\1", $_SERVER['HTTP_ARGV']);
 db::query("DELETE FROM authTokens WHERE UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(lastUsage) >= 60");
 
+$authToken = $_SERVER['HTTP_AUTH_TOKEN'];
+
 if (!isset($unauthorized)) {
-	$authToken = $_SERVER['HTTP_AUTH_TOKEN'];
 	$userinfo = db::query("SELECT users.*, authTokens.addressBefore, authTokens.addressAfter
 	FROM users, authTokens
 	WHERE authTokens.token=:token
@@ -77,5 +78,25 @@ class userAccount
 	getOnline()
 	{
 		return db::query("SELECT *, UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(authTokens.lastUsage) AS timeDifference FROM authTokens WHERE 1");
+	}
+}
+
+class nmps
+{
+	public static function
+	sendEvent($target, $sender, $eventType, $eventData)
+	{
+		return db::query("INSERT INTO events (userId, senderId, eventType, eventData) VALUES (:userId, :senderId, :eventType, :eventData)",
+			[':userId' => $target, ':senderId' => $sender,
+			':eventType' => $eventType,
+			':eventData' => ((0 ? "" :
+				"\033[1;33m[\033[1;97m" . date("H:i:s") . "\033[1;33m] \033[0;97m") .
+			$eventData)]);
+	}
+
+	public static function
+	printEvent($eventData)
+	{
+		echo "\033[1;33m[\033[1;97m" . date("H:i:s") . "\033[1;33m] \033[0;97m" . $eventData;
 	}
 }

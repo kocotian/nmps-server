@@ -9,7 +9,7 @@ while (!count($events = db::query("SELECT * FROM events WHERE userId=:userId",
 }
 
 foreach ($events as $event) {
-	echo ($event['eventType'] == 126 ? "\004\001" : "") . $event['eventData'];
+	echo ($event['eventType'] == 126 ? "\004\001" : "") . $event['eventData'] . "\n";
 	db::query("DELETE FROM events WHERE id=:id", [':id' => $event['id']]);
 }
 

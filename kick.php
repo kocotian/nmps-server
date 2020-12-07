@@ -17,6 +17,6 @@ db::query("DELETE FROM authTokens WHERE userId=:userId",
 
 db::query("INSERT INTO events (userId, senderId, eventType, eventData) VALUES (:userId, :senderId, :eventType, :eventData)",
 	[':userId' => $target, ':senderId' => $userinfo['id'],
-	':eventType' => 126, ':eventData' => "\033[1;33m[\033[1;97m" . date("H:i:s") . "\033[1;33m] \033[0;37mYou were kicked by \033[1;97m" . $userinfo['username'] . " \033[0;37mfor \033[1;31m" . (count($argv) ? implode(' ', $argv) : "no reason")]);
+	':eventType' => 126, ':eventData' => "\033[1;33m[\033[1;97m" . date("H:i:s") . "\033[1;33m] \033[0;37mYou were kicked by \033[1;97m" . $userinfo['username'] . " \033[0;37mfor \033[1;31m" . (count($argv) > 1 ? implode(' ', $argv) : "no reason")]);
 
 echo "\033[1;33m[\033[1;97m" . date("H:i:s") . "\033[1;33m] \033[0;32mKicked \033[0;37m" . userAccount::idToUsername($target) . "\033[1;37m.";
