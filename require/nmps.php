@@ -99,4 +99,24 @@ class nmps
 	{
 		echo "\033[1;33m[\033[1;97m" . date("H:i:s") . "\033[1;33m] \033[0;97m" . $eventData;
 	}
+
+	public static function
+	getStatCode($which)
+	{
+		if ($which == 'health')
+			return "\001";
+		else if ($which == 'energy')
+			return "\002";
+		else if ($which == 'saturation')
+			return "\003";
+		else if ($which == 'sanity')
+			return "\004";
+		else return "\177";
+	}
+
+	public static function
+	getStat($which, $userinfo)
+	{
+		return "\016" . self::getStatCode($which) . ($userinfo[$which] < 16 ? "0" : "") . dechex($userinfo[$which]) . "\001";
+	}
 }
